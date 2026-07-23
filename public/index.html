@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1c1a3a" />
+<title>Just One &mdash; Party Word Game</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>1️⃣</text></svg>" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+<main id="app">
+
+  <!-- HOME -->
+  <section id="screen-home" class="screen active">
+    <div class="brand">
+      <div class="brand-badge">1</div>
+      <h1>Just One</h1>
+      <p class="tagline">One clue each. One team guess. Zero repeats.</p>
+    </div>
+
+    <div class="card">
+      <label class="field">
+        <span>Your name</span>
+        <input id="input-name" maxlength="20" placeholder="e.g. Sam" autocomplete="off" />
+      </label>
+
+      <div class="field">
+        <span>Pick an icon</span>
+        <div id="icon-grid" class="icon-grid"></div>
+      </div>
+
+      <div class="home-actions">
+        <button id="btn-show-create" class="btn btn-primary">Create a room</button>
+        <button id="btn-show-join" class="btn btn-secondary">Join a room</button>
+      </div>
+
+      <div id="create-options" class="hidden">
+        <label class="field">
+          <span>Rounds</span>
+          <div id="rounds-grid" class="rounds-grid">
+            <button type="button" class="chip" data-rounds="5">5</button>
+            <button type="button" class="chip" data-rounds="8">8</button>
+            <button type="button" class="chip active" data-rounds="13">13</button>
+          </div>
+        </label>
+        <button id="btn-create" class="btn btn-primary btn-block">Create room</button>
+      </div>
+
+      <div id="join-options" class="hidden">
+        <label class="field">
+          <span>Room code</span>
+          <input id="input-code" maxlength="4" placeholder="ABCD" autocomplete="off" class="code-input" />
+        </label>
+        <button id="btn-join" class="btn btn-primary btn-block">Join room</button>
+      </div>
+    </div>
+
+    <details class="how-to">
+      <summary>How to play Just One</summary>
+      <ol>
+        <li>Each round, one player is the <strong>guesser</strong>. Everyone else sees a secret word.</li>
+        <li>Everyone else secretly writes <strong>one word</strong> as a clue &mdash; no repeats of the secret word, and no numbers or gestures.</li>
+        <li>Any clues that match each other exactly are automatically <strong>removed</strong> before the guesser sees them.</li>
+        <li>The guesser sees the remaining clues and gets <strong>one guess</strong> at the secret word.</li>
+        <li>It's fully cooperative &mdash; your whole group shares one score, out of the number of rounds played.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- LOBBY -->
+  <section id="screen-lobby" class="screen">
+    <div class="lobby-header">
+      <p class="eyebrow">Room code</p>
+      <h2 id="lobby-code">----</h2>
+      <p class="hint">Share this code with everyone in the room</p>
+    </div>
+    <div class="card">
+      <h3>Players</h3>
+      <ul id="lobby-players" class="player-list"></ul>
+      <p id="lobby-wait" class="hint">Waiting for the host to start the game&hellip;</p>
+      <button id="btn-start" class="btn btn-primary btn-block hidden">Start game</button>
+      <p id="lobby-min-hint" class="hint hidden">Need at least 3 players to start.</p>
+    </div>
+    <button id="btn-leave-lobby" class="btn btn-text">Leave room</button>
+  </section>
+
+  <!-- CLUE PHASE -->
+  <section id="screen-clue" class="screen">
+    <div class="round-banner">
+      <span id="clue-round-label">Round 1</span>
+      <span id="clue-score-label" class="score-pill">0 / 0</span>
+    </div>
+
+    <div id="clue-as-guesser" class="card center hidden">
+      <div class="big-emoji">🤔</div>
+      <h2>You're guessing this round!</h2>
+      <p class="hint">Sit tight while your team writes their clues.</p>
+      <ul id="clue-progress-list" class="progress-list"></ul>
+    </div>
+
+    <div id="clue-as-giver" class="card hidden">
+      <p class="eyebrow">The secret word is</p>
+      <h2 id="clue-secret-word" class="secret-word">WORD</h2>
+      <p class="hint" id="clue-active-hint">Give <span id="clue-active-name">Someone</span> a one-word clue.</p>
+      <form id="clue-form">
+        <input id="input-clue" class="code-input" maxlength="40" placeholder="One word&hellip;" autocomplete="off" />
+        <button type="submit" class="btn btn-primary btn-block">Submit clue</button>
+      </form>
+      <div id="clue-submitted" class="hidden">
+        <p class="hint">Clue submitted: <strong id="clue-submitted-text"></strong></p>
+        <ul id="clue-progress-list-giver" class="progress-list"></ul>
+      </div>
+    </div>
+
+    <button id="btn-force-reveal" class="btn btn-text hidden">Host: reveal clues now</button>
+  </section>
+
+  <!-- GUESS PHASE -->
+  <section id="screen-guess" class="screen">
+    <div class="round-banner">
+      <span id="guess-round-label">Round 1</span>
+      <span id="guess-score-label" class="score-pill">0 / 0</span>
+    </div>
+    <div class="card">
+      <p class="eyebrow" id="guess-heading">Clues for <span id="guess-active-name">Someone</span></p>
+      <ul id="guess-clue-list" class="clue-list"></ul>
+
+      <div id="guess-as-guesser" class="hidden">
+        <form id="guess-form">
+          <input id="input-guess" class="code-input" maxlength="40" placeholder="Your guess&hellip;" autocomplete="off" />
+          <button type="submit" class="btn btn-primary btn-block">Submit guess</button>
+        </form>
+        <button id="btn-pass" class="btn btn-text btn-block">Pass / don't know</button>
+      </div>
+      <p id="guess-as-other" class="hint hidden">Waiting for <span id="guess-waiting-name">the guesser</span> to answer&hellip;</p>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="screen-result" class="screen">
+    <div class="card center">
+      <div id="result-icon" class="big-emoji">🎉</div>
+      <h2 id="result-headline">Correct!</h2>
+      <p class="hint">The word was <strong id="result-word">WORD</strong></p>
+      <p class="hint"><span id="result-guesser-icon"></span> <span id="result-guesser-name"></span> guessed: <em id="result-guess-text"></em></p>
+      <div class="score-banner">
+        <span id="result-score">0 / 0</span> correct so far
+      </div>
+      <div id="result-clues" class="result-clue-section"></div>
+      <button id="btn-next-round" class="btn btn-primary btn-block hidden">Next round</button>
+      <p id="result-wait" class="hint hidden">Waiting for host to continue&hellip;</p>
+    </div>
+  </section>
+
+  <!-- GAME OVER -->
+  <section id="screen-gameover" class="screen">
+    <div class="card center">
+      <div class="big-emoji">🏆</div>
+      <h2>Final score</h2>
+      <div class="final-score" id="final-score">0 / 13</div>
+      <p id="final-rating" class="rating"></p>
+    </div>
+    <div class="card">
+      <h3>Scoreboard</h3>
+      <ul id="final-players" class="final-player-list"></ul>
+    </div>
+    <button id="btn-play-again" class="btn btn-primary btn-block hidden">Play again (same room)</button>
+    <button id="btn-new-game" class="btn btn-text">Back to home</button>
+  </section>
+
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
