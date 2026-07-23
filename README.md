@@ -1,15 +1,16 @@
-# Just One — Party Game (Mobile Web)
+# JUST *cl*ONE — Party Game (Mobile Web)
 
 A free, open-source mobile-web version of the cooperative party game
-**Just One**, built to be played by a group in the same room, each on their
-own phone, joined together with a short room code.
+**Just One**, rebranded here as **JUST *cl*ONE** — built to be played by a
+group in the same room, each on their own phone, joined together with a
+short room code.
 
 No app install, no accounts, no database — just open the site, create or
 join a room, and play.
 
 ## How the game works
 
-Just One is fully cooperative. Each round:
+JUST *cl*ONE is fully cooperative. Each round:
 
 1. One player is the **guesser**. Everyone else sees a secret word.
 2. Every other player secretly writes **one word** as a clue for the

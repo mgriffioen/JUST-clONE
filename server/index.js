@@ -182,5 +182,5 @@ function withRoom(socket, ack, fn) {
 }
 
 server.listen(PORT, () => {
-  console.log(`Just One server listening on port ${PORT}`);
+  console.log(`JUST clONE server listening on port ${PORT}`);
 });
