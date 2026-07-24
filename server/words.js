@@ -2,6 +2,12 @@
 // Mix of concrete nouns, places, people/roles, animals, food, and everyday
 // concepts that most groups of adults can give a clean single-word clue for.
 const WORDS = [
+  // Shangri-La
+  'lake', 'fireworks', 'beer', 'raft', 'slide', 'license plate', 'shark', 
+  'hot dog', 'ribs', 'kubb', 'waterworld', 'the water', 'shangri-la', 'omp', 
+  'dune', 'spiral', 'nice', 'bocce', 'erik', 'benedict', 'mark', 'sean', 
+  'carl', 'dusty', 'paul', 'brandon',
+
   // Everyday objects
   'umbrella', 'toothbrush', 'backpack', 'candle', 'mirror', 'blanket', 'ladder',
   'suitcase', 'pillow', 'wallet', 'scissors', 'hammer', 'anchor', 'compass',
@@ -10,7 +16,7 @@ const WORDS = [
   'guitar', 'piano', 'camera', 'clock', 'calendar', 'envelope', 'stamp',
   'map', 'key', 'lock', 'chain', 'rope', 'net', 'basket', 'bucket', 'broom',
   'vacuum', 'blender', 'toaster', 'kettle', 'thermometer', 'battery', 'magnet',
-  'microscope', 'binoculars', 'flashlight', 'matches', 'firework', 'bubble',
+  'microscope', 'binoculars', 'flashlight', 'matches', 'bubble',
 
   // Places
   'volcano', 'island', 'desert', 'jungle', 'glacier', 'canyon', 'waterfall',
@@ -25,7 +31,7 @@ const WORDS = [
   'flamingo', 'peacock', 'hedgehog', 'squirrel', 'raccoon', 'otter', 'walrus',
   'chameleon', 'scorpion', 'jellyfish', 'butterfly', 'firefly', 'woodpecker',
   'ostrich', 'platypus', 'koala', 'panda', 'cheetah', 'crocodile', 'tortoise',
-  'seahorse', 'lobster', 'beaver', 'bat', 'owl', 'eagle', 'shark', 'whale',
+  'seahorse', 'lobster', 'beaver', 'bat', 'owl', 'eagle', 'whale',
 
   // Food & drink
   'pancake', 'pretzel', 'popcorn', 'spaghetti', 'sushi', 'taco', 'burrito',
@@ -58,7 +64,7 @@ const WORDS = [
   // Transportation
   'submarine', 'helicopter', 'rocket', 'canoe', 'sailboat', 'bulldozer',
   'tractor', 'scooter', 'bicycle', 'motorcycle', 'skateboard', 'wheelchair',
-  'elevator', 'escalator', 'parachute', 'hot-air balloon', 'sled', 'raft',
+  'elevator', 'escalator', 'parachute', 'hot-air balloon', 'sled',
 
   // Abstract / activities
   'birthday', 'wedding', 'vacation', 'graduation', 'reunion', 'festival',
