@@ -36,10 +36,60 @@
   }
 
   // ---------- screens ----------
+  // "home" is the only screen marked .active in the static HTML.
+  let currentScreenName = 'home';
+  let screenTransitioning = false;
+  let pendingScreenName = null;
+
   function showScreen(name) {
-    document.querySelectorAll('.screen').forEach((s) => s.classList.remove('active'));
-    const el = $(`screen-${name}`);
-    if (el) el.classList.add('active');
+    if (screenTransitioning) { pendingScreenName = name; return; }
+    if (name === currentScreenName) return;
+    beginScreenTransition(name);
+  }
+
+  function beginScreenTransition(name) {
+    const toEl = $(`screen-${name}`);
+    if (!toEl) return;
+    const fromEl = $(`screen-${currentScreenName}`);
+
+    if (!fromEl || fromEl === toEl) {
+      toEl.classList.add('active');
+      currentScreenName = name;
+      return;
+    }
+
+    screenTransitioning = true;
+    fromEl.classList.add('screen-transitioning', 'screen-outgoing');
+    toEl.classList.add('active', 'screen-transitioning', 'screen-incoming', 'fold-enter');
+
+    // Flush the starting pose above before flipping to the resting pose
+    // below, so the browser actually animates the change.
+    void toEl.offsetHeight;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        toEl.classList.remove('fold-enter');
+        fromEl.classList.add('fold-leave');
+      });
+    });
+
+    let finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      toEl.removeEventListener('transitionend', onTransitionEnd);
+      fromEl.classList.remove('active', 'screen-transitioning', 'screen-outgoing', 'fold-leave');
+      toEl.classList.remove('screen-transitioning', 'screen-incoming');
+      currentScreenName = name;
+      screenTransitioning = false;
+      const next = pendingScreenName;
+      pendingScreenName = null;
+      if (next && next !== name) beginScreenTransition(next);
+    }
+    function onTransitionEnd(e) {
+      if (e.target === toEl && e.propertyName === 'transform') finish();
+    }
+    toEl.addEventListener('transitionend', onTransitionEnd);
+    setTimeout(finish, 600); // safety net in case transitionend never fires
   }
 
   const STATUS_TO_SCREEN = {

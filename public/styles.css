@@ -33,15 +33,32 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
+  perspective: 1300px;
 }
 
-.screen { display: none; flex-direction: column; gap: 16px; animation: fade-in .25s ease; }
+.screen { display: none; flex-direction: column; gap: 16px; }
 .screen.active { display: flex; }
 
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Pebble-style "flap" transition: the incoming screen tips up into place
+   around a bottom hinge while the outgoing one tips away the same way.
+   Both screens are pulled out of normal flow and overlaid at the exact
+   spot #app's own padding would otherwise put them, for the duration of
+   the crossfade only. */
+.screen.screen-transitioning {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 20px);
+  left: 18px;
+  right: 18px;
+  backface-visibility: hidden;
+  transform-origin: bottom center;
+  transition: transform .5s cubic-bezier(.62, 0, .38, 1), opacity .4s ease;
+  will-change: transform, opacity;
 }
+.screen.screen-incoming { z-index: 2; }
+.screen.screen-outgoing { z-index: 1; }
+.screen.screen-incoming.fold-enter { transform: rotateX(78deg) translateY(4%); opacity: 0; }
+.screen.screen-outgoing.fold-leave { transform: rotateX(-78deg) translateY(-4%); opacity: 0; }
 
 .brand { text-align: center; margin-top: 8px; }
 .brand-badge {
