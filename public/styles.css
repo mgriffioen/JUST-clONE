@@ -93,10 +93,10 @@ h3 { margin: 0; font-size: 15px; text-transform: uppercase; letter-spacing: .06e
   padding: 8px 0;
   border-radius: 12px;
   border: 2px solid transparent;
-  background: #100e26;
+  background: #c4bff7;
   cursor: pointer;
 }
-.icon-btn.selected { border-color: var(--accent-2); background: #2a2657; }
+.icon-btn.selected { border-color: var(--accent-2); background: #76d3d1; }
 
 .btn {
   border: none;
