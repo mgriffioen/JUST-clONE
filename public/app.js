@@ -471,7 +471,11 @@
     $('result-word').textContent = r.word;
     $('result-guesser-icon').textContent = r.activePlayer ? r.activePlayer.icon : '';
     $('result-guesser-name').textContent = r.activePlayer ? r.activePlayer.name : '';
-    $('result-guess-text').textContent = r.passed ? 'passed' : r.guess;
+    const guessEl = $('result-guess-text');
+    guessEl.textContent = r.passed ? 'Passed' : r.guess;
+    guessEl.classList.toggle('correct', !!r.correct);
+    guessEl.classList.toggle('wrong', !r.correct && !r.passed);
+    guessEl.classList.toggle('passed', !!r.passed);
     $('result-score').textContent = `${view.teamScore.correct} / ${view.teamScore.total}`;
 
     const cluesEl = $('result-clues');
