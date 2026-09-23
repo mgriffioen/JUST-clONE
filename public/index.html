@@ -187,8 +187,14 @@
     <div class="card center">
       <div id="result-icon" class="big-emoji">🎉</div>
       <h2 id="result-headline">Correct!</h2>
-      <p class="hint">The word was <strong id="result-word">WORD</strong></p>
-      <p class="hint"><span id="result-guesser-icon"></span> <span id="result-guesser-name"></span> guessed: <em id="result-guess-text"></em></p>
+      <div class="result-reveal">
+        <p class="eyebrow">The word was</p>
+        <p id="result-word" class="secret-word result-word">WORD</p>
+      </div>
+      <div class="result-reveal">
+        <p class="eyebrow"><span id="result-guesser-icon"></span> <span id="result-guesser-name"></span> guessed</p>
+        <p id="result-guess-text" class="result-guess">GUESS</p>
+      </div>
       <div class="score-banner">
         <span id="result-score">0 / 0</span> correct so far
       </div>
