@@ -122,6 +122,13 @@ npx playwright screenshot --viewport-size=1200,630 \
 - A clue must be a single word (no spaces) — the client and server both
   enforce this.
 - Duplicate clues are matched case-insensitively.
+- Guesses are matched loosely (`server/guess.js`): case, spacing,
+  punctuation and a leading "a/an/the" are ignored; singular/plural both
+  count ("noodle" for "noodles"); common alternate names and spellings are
+  accepted ("bike" for "bicycle", "fridge" for "refrigerator", "doughnut"
+  for "donut"); and a one-letter typo is forgiven on words of six or more
+  letters (two on words of ten or more), as long as the typo isn't itself
+  another word from the list. Add alternates to `ALIASES` in that file.
 - No two players in a room share an icon — it's how you tell whose clue is
   whose. The server assigns a free one if the icon you picked was already
   claimed (it'll tell you), and the lobby lets you switch to any icon that
