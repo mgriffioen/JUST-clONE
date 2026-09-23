@@ -2,12 +2,6 @@
 // Mix of concrete nouns, places, people/roles, animals, food, and everyday
 // concepts that most groups of adults can give a clean single-word clue for.
 const WORDS = [
-  // Shangri-La
-  'lake', 'fireworks', 'beer', 'raft', 'slide', 'license plate', 'shark', 
-  'hot dog', 'ribs', 'kubb', 'waterworld', 'the water', 'shangri-la', 'omp', 
-  'dune', 'perfect spiral', 'nice', 'bocce', 'erik', 'benedict', 'mark', 'sean', 
-  'carl', 'dusty', 'paul', 'brandon', 'cigarette',
-
   // Everyday objects
   'umbrella', 'toothbrush', 'backpack', 'candle', 'mirror', 'blanket', 'ladder',
   'suitcase', 'pillow', 'wallet', 'scissors', 'hammer', 'anchor', 'compass',
