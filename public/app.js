@@ -281,10 +281,28 @@
 
   async function leaveRoom() {
     await emitWithAck('leave_room', {});
+    returnHome();
+  }
+
+  function returnHome() {
     clearSession();
     state.view = null;
     showScreen('home');
   }
+
+  // ---------- ending a game early ----------
+  document.querySelectorAll('.btn-end-game').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      if (!window.confirm('End the game for everyone? This closes the room.')) return;
+      const res = await emitWithAck('end_game', {});
+      if (res.ok) returnHome();
+    });
+  });
+
+  socket.on('room_closed', ({ message } = {}) => {
+    returnHome();
+    toast(message || 'The room was closed.');
+  });
 
   // ---------- clue phase ----------
   $('clue-form').addEventListener('submit', async (e) => {
@@ -327,6 +345,9 @@
     else if (view.status === 'guess') renderGuess(view);
     else if (view.status === 'result') renderResult(view);
     else if (view.status === 'gameover') renderGameOver(view);
+
+    const isHost = !!(view.you && view.you.isHost);
+    document.querySelectorAll('.btn-end-game').forEach((btn) => btn.classList.toggle('hidden', !isHost));
   }
 
   function playerRow(player, extraBadge) {

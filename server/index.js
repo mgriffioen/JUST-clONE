@@ -190,6 +190,17 @@ io.on('connection', (socket) => {
     });
   });
 
+  // Host-only escape hatch for abandoning a game partway through. Rather than
+  // resetting to the lobby, it closes the room outright so nobody lingers in
+  // it and everyone lands back on the home screen, free to start fresh.
+  socket.on('end_game', (_payload, ack) => {
+    withRoom(socket, ack, (room, playerId) => {
+      if (room.hostId !== playerId) throw new Error('Only the host can end the game.');
+      closeRoom(room, socket.id);
+      ack && ack({ ok: true });
+    });
+  });
+
   socket.on('leave_room', (_payload, ack) => {
     const { roomCode, playerId } = socket.data;
     if (roomCode) {
@@ -218,6 +229,22 @@ io.on('connection', (socket) => {
     }
   });
 });
+
+function closeRoom(room, closedBySocketId) {
+  room.players.forEach((player) => {
+    if (!player.socketId) return;
+    const peer = io.sockets.sockets.get(player.socketId);
+    if (peer) {
+      peer.leave(room.code);
+      peer.data.roomCode = null;
+      peer.data.playerId = null;
+    }
+    if (player.socketId !== closedBySocketId) {
+      io.to(player.socketId).emit('room_closed', { message: 'The host ended the game.' });
+    }
+  });
+  manager.remove(room.code);
+}
 
 function withRoom(socket, ack, fn) {
   try {
