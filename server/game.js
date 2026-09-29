@@ -1,5 +1,6 @@
 const { createWordDeck, WORDS } = require('./words');
 const { isIcon, pickIcon } = require('./icons');
+const { isCorrectGuess } = require('./guess');
 
 const MIN_PLAYERS = 3;
 const MAX_PLAYERS = 8;
@@ -234,7 +235,7 @@ class Room {
     if (!active || playerId !== active.id) throw new Error('Only the active player guesses.');
     const guessClean = String(text || '').trim();
     const isPass = guessClean === '';
-    const correct = !isPass && normalizeClue(guessClean) === normalizeClue(this.currentWord);
+    const correct = !isPass && isCorrectGuess(guessClean, this.currentWord);
     this.guess = isPass ? '(passed)' : guessClean;
     if (correct) active.score.correctAsActive += 1;
     const validClues = Object.entries(this.clues)
